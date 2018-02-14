@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 
 {% block bodyBlock %}
-    <h1>This is home page</h1>
+    {{ count }} post entries are found.
+    <hr>
+    {% for object in object_list %}
+        <div class="post">
+            <h3>{{ object.title }}</h3>
+            <small>{{ object.created_date }}</small>
+            <p>{{ object.content|truncatechars:"10" }}</p>
+        </div>
+    {% empty %}
+        <p>No entries found</p>
+    {% endfor %}
 {% endblock %}

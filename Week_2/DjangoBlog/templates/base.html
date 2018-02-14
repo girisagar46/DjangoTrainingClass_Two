@@ -10,12 +10,22 @@
 <body>
 {% include 'snippets/nav.html' %}
 
-<img src="{% static 'tys.jpg' %}" alt="alt text" width="200px" height="200px">
-<div class="container">
-    {% block bodyBlock %}
+{#<img src="{% static 'tys.jpg' %}" alt="alt text" width="200px" height="200px">#}
 
-    {% endblock bodyBlock %}
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            {% block bodyBlock %}
+
+            {% endblock bodyBlock %}
+        </div>
+
+        <div class="col-4">
+            <p>Latest Blogs</p>
+        </div>
+    </div>
 </div>
+
 
 
 </body>
