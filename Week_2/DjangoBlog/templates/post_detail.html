@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block bodyBlock %}
+
+    <h2>{{ one_post.title }}</h2>
+    <small>Post By: {{ one_post.author }} in {{ one_post.created_date }}</small>
+    <p>{{ one_post.content }}</p>
+
+{% endblock bodyBlock %}

@@ -1,12 +1,11 @@
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 
-from blog.views import home, about, contact
+from crypto.views import get_crypto
 
 urlpatterns = [
-    url(r'^$', home, name="home"),
-    url(r'^about/', about, name="about"),
-    url(r'^contact/', contact, name="contact"),
+    url(r'', include("blog.urls")),
+    url(r'^crypto/', include("crypto.urls")),
     url(r'^admin/', admin.site.urls),
 ]
