@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>www.blog.com</title>
+    {% include 'snippets/css.html' %}
+    {% include 'snippets/js.html' %}
+</head>
+<body>
+{% include 'snippets/nav.html' %}
+
+{#<img src="{% static 'tys.jpg' %}" alt="alt text" width="200px" height="200px">#}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            {% block bodyBlock %}
+
+            {% endblock bodyBlock %}
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
