@@ -6,4 +6,15 @@
     <small>Post By: {{ one_post.author }} in {{ one_post.created }}</small>
     <p>{{ one_post.body }}</p>
 
+    <h3>Comments:</h3>
+
+    {% for comment in comments %}
+        <hr>
+        <p>{{ comment.name }}</p>
+        <br>
+        <p>{{ comment.comment_body }}</p>
+    {% empty %}
+        <p>No comments yet</p>
+    {% endfor %}
+
 {% endblock bodyBlock %}

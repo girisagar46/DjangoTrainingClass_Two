@@ -1,7 +1,8 @@
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
 
-from blog.models import Post
+from blog.models import Post, Comment
 
 
 # def home(request):
@@ -62,15 +63,39 @@ class PostListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
         # context['object_list'] = Post.objects.order_by('-created')
-        context['object_list'] = Post.objects.filter(status='published').order_by('-created')
+        # context['object_list'] = Post.objects.filter(status='published').order_by('-created')
+        context['object_list'] = Post.published.all()
         context['count'] = context['object_list'].count()
         return context
 
 
 class PostDetailView(DetailView):
-    model = Post
-    context_object_name = 'one_post'
-    template_name = 'blog/post_detail.html'
+    # Old method
+    # model = Post
+    # context_object_name = 'one_post'
+    # template_name = 'blog/post_detail.html'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(PostDetailView, self).get_context_data(**kwargs)
+    #     context['comments'] = Comment.objects.all()
+    #     return context
+
+    # New method: To get post and the comments
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+
+        # get one object
+        one_post = Post.objects.get(pk=pk)
+
+        # based on the object, get the comments in the post
+        comments = Comment.objects.filter(post_id=one_post)
+
+        # Prepare context
+        ctx = {
+            "one_post": one_post,
+            'comments': comments
+        }
+        return render(request, 'blog/post_detail.html', context=ctx)
 
 
 
