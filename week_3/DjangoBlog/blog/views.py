@@ -1,8 +1,10 @@
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 from blog.models import Post, Comment
+
+from blog.forms import CommentForm
 
 
 # def home(request):
@@ -88,17 +90,25 @@ class PostDetailView(DetailView):
         one_post = Post.objects.get(pk=pk)
 
         # based on the object, get the comments in the post
-        comments = Comment.objects.filter(post_id=one_post)
+        # comments = Comment.objects.filter(post_id=one_post)
+        comments = one_post.post_comments.all()
+
+        # prepare form
+        comment_form = CommentForm()
 
         # Prepare context
         ctx = {
             "one_post": one_post,
-            'comments': comments
+            'comments': comments,
+            'comment_form': comment_form
         }
         return render(request, 'blog/post_detail.html', context=ctx)
 
-
-
-
-
-
+    def post(self, request, *args, **kwargs):
+        comments = CommentForm(data=request.POST)
+        if comments.is_valid():
+            new_comment = comments.save(commit=False)
+            post_comment = get_object_or_404(Post, pk=kwargs.get("pk"))
+            new_comment.post_id = post_comment
+            new_comment.save()
+            return redirect('blog:detail', pk=post_comment.pk)

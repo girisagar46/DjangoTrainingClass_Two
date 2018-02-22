@@ -11,10 +11,16 @@
     {% for comment in comments %}
         <hr>
         <p>{{ comment.name }}</p>
-        <br>
         <p>{{ comment.comment_body }}</p>
     {% empty %}
         <p>No comments yet</p>
     {% endfor %}
+    <hr>
+    <h3>Add Comment</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="submit" value="Add Comment" class="btn btn-success">
+    </form>
 
 {% endblock bodyBlock %}
