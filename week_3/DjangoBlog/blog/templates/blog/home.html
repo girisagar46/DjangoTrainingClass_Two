@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% load pagination_tags %}
 
 {% block bodyBlock %}
+    {% autopaginate object_list 2 %}
 {#    {{ object_list|length }} post entries are found.#}
     {{ count }} post entries are found.
     <hr>
@@ -15,4 +17,8 @@
     {% empty %}
         <p>No entries found</p>
     {% endfor %}
+
+    <div>
+    {% paginate %}
+    </div>
 {% endblock %}

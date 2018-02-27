@@ -15,9 +15,22 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'blog:contact' %}">Contact</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'blog:new_post' %}">Create Post</a>
+            </li>
+            <li class="nav-item">
+                {% if user.is_authenticated %}
+                    <small>Logged in as: {{ user.username }}</small>
+                    <a class="nav-link" href="{% url 'blog:logout' %}?next={% url 'blog:login' %}">logout</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'blog:login' %}?next={{request.path}}">Login</a>
+                    <a class="nav-link" href="{% url 'blog:register' %}">Register</a>
+                {% endif %}
+            </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" action="{% url 'blog:search' %}" method="POST">
+            {% csrf_token %}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="searchquery" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>

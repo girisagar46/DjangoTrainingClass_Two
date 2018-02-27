@@ -1,10 +1,14 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 from blog.models import Post, Comment
 
-from blog.forms import CommentForm
+from blog.forms import CommentForm, PostForm
 
 
 # def home(request):
@@ -87,7 +91,13 @@ class PostDetailView(DetailView):
         pk = kwargs.get('pk')
 
         # get one object
-        one_post = Post.objects.get(pk=pk)
+        try:
+            one_post = Post.objects.get(
+                Q(pk=pk) & Q(status='published')
+            )
+        except:
+            raise Http404()
+
 
         # based on the object, get the comments in the post
         # comments = Comment.objects.filter(post_id=one_post)
@@ -112,3 +122,54 @@ class PostDetailView(DetailView):
             new_comment.post_id = post_comment
             new_comment.save()
             return redirect('blog:detail', pk=post_comment.pk)
+
+
+def search(request, *args, **kwargs):
+    query = request.POST.get('searchquery')
+    result = Post.objects.filter(
+        (Q(title__contains=query) | Q(body__contains=query)) & Q(status="published")
+    )
+    count = result.count()
+    ctx = {
+        'result': result,
+        'count': count
+    }
+
+    return render(request, 'blog/searchresult.html', context=ctx)
+
+
+@login_required
+def new_post(request):
+    form = None
+    if request.method == "POST":
+        new_post = PostForm(data=request.POST)
+        if new_post.is_valid():
+            post = new_post.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('blog:detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/new_post.html', {'form':form})
+
+def resister(request):
+    form = None
+    if request.method == 'POST':
+        user_form = UserCreationForm(data=request.POST)
+        if user_form.is_valid():
+            new_user = user_form.save()
+            return redirect('blog:home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'blog/register.html', {'form':form})
+
+
+
+
+
+
+
+
+
+
+

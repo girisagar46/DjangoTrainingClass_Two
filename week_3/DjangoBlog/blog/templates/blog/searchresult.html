@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block bodyBlock %}
+
+    {{ count }} articles found based on your query.
+
+    <ul>
+        {% for res in result %}
+            <li><a href="{% url 'blog:detail' pk=res.pk %}">{{ res.title }}</a></li>
+        {% empty %}
+            <p>No results found.</p>
+        {% endfor %}
+    </ul>
+
+{% endblock bodyBlock %}
