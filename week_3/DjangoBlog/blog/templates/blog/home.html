@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% load pagination_tags %}
+{% load blog_tags %}
 
 {% block bodyBlock %}
-    {% autopaginate object_list 2 %}
+    {% autopaginate object_list 5 %}
 {#    {{ object_list|length }} post entries are found.#}
-    {{ count }} post entries are found.
+{#    {{ count }} post entries are found.#}
+    <span class="text-info">{% count %} post entries are found.</span>
     <hr>
     {% for object in object_list %}
         <div class="post">
 {#            <h3>{{ forloop.counter }} <a href="{% url 'detail' pk=object.pk %}">{{ object.title|cut:" " }}</a></h3>#}
-            <h3><a href="{% url 'blog:detail' pk=object.pk %}">{{ object.title }}</a></h3>
+            <h3><a href="{% url 'blog:detail' pk=object.pk %}">{{ object.title|capitalize_title|safe }}</a></h3>
             <small>{{ object.created|date:"Y M d D" }} {{ object.created|time:"h:i" }}</small>
 {#            <p>{{ object.content|truncatechars:"10" }}</p>#}
             <p>{{ object.body|truncatewords:3 }}</p>

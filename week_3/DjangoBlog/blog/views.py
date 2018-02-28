@@ -71,7 +71,7 @@ class PostListView(ListView):
         # context['object_list'] = Post.objects.order_by('-created')
         # context['object_list'] = Post.objects.filter(status='published').order_by('-created')
         context['object_list'] = Post.published.all()
-        context['count'] = context['object_list'].count()
+        # context['count'] = context['object_list'].count()
         return context
 
 

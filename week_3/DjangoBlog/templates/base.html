@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load blog_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,20 +9,27 @@
     {% include 'snippets/js.html' %}
 </head>
 <body>
-{% include 'snippets/nav.html' %}
+{#{% include 'snippets/nav.html' with blogname="My Blog 123"%}#}
+{% include 'snippets/nav.html'%}
 
 {#<img src="{% static 'tys.jpg' %}" alt="alt text" width="200px" height="200px">#}
 
 <div class="container">
+    <p>Today's date: {% current_time %}</p>
     <div class="row">
         <div class="col-8">
             {% block bodyBlock %}
 
             {% endblock bodyBlock %}
         </div>
+        <div class="col-4">
+            <h3>Latest Blogs:</h3>
+            {% get_latest 2 %}
+        </div>
     </div>
 </div>
-
+<hr>
+<p class="text-center">{% footer %} &copy;</p>
 
 
 </body>

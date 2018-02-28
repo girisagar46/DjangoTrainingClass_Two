@@ -1,11 +1,20 @@
 {% extends 'base.html' %}
+{% load blog_tags %}
 
 {% block bodyBlock %}
 
     <h2>{{ one_post.title }}</h2>
     <small>Post By: {{ one_post.author }} in {{ one_post.created }}</small>
     <p>{{ one_post.body }}</p>
-
+    <hr>
+    <h4>Similar posts:</h4>
+    {% similars one_post.title one_post.pk as similar_posts %}
+    <ul>
+        {% for similar in similar_posts %}
+            <li><a href="{% url 'blog:detail' pk=similar.pk %}">{{ similar.title }}</a></li>
+        {% endfor%}
+    </ul>
+    <hr>
     <h3>Comments:</h3>
 
     {% for comment in comments %}
