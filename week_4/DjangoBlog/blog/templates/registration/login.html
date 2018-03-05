@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block bodyBlock %}
+    <h1>Login Here:</h1>
+
+    {% if form.errors %}
+        <p class="text-danger">Username and password did not match.</p>
+    {% endif %}
+
+    <form action="{% url 'blog:login' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Login</button>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+{% endblock bodyBlock %}

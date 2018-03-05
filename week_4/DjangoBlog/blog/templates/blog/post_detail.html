@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load blog_tags %}
+
+{% block bodyBlock %}
+
+    <h2>{{ one_post.title }}</h2>
+    <small>Post By: {{ one_post.author }} in {{ one_post.created }}</small>
+    <p>{{ one_post.body }}</p>
+    <hr>
+    <h4>Similar posts:</h4>
+    {% similars one_post.title one_post.pk as similar_posts %}
+    <ul>
+        {% for similar in similar_posts %}
+            <li><a href="{% url 'blog:detail' pk=similar.pk %}">{{ similar.title }}</a></li>
+        {% endfor%}
+    </ul>
+    <hr>
+    <h3>Comments:</h3>
+
+    {% for comment in comments %}
+        <hr>
+        <p>{{ comment.name }}</p>
+        <p>{{ comment.comment_body }}</p>
+    {% empty %}
+        <p>No comments yet</p>
+    {% endfor %}
+    <hr>
+    <h3>Add Comment</h3>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="submit" value="Add Comment" class="btn btn-success">
+    </form>
+
+{% endblock bodyBlock %}
