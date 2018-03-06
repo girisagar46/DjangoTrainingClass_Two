@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^search/', views.search, name='search'),
     url(r'^apis/', views.api_doc, name='api_doc'),
     url(r'^api/posts/', views.post_list_api, name='list_api_view'),
-    url(r'^api/post/(?P<pk>[0-9]+)/$', views.post_detail_api, name='detail_api_view')
+    url(r'^api/post/(?P<pk>[0-9]+)/$', views.post_detail_api, name='detail_api_view'),
+    url('^apii/', include('blog.api.urls', namespace='blogapi'))
 ]
