@@ -1,0 +1,8 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <button class="button" style="background: red">Delete All At once</button>
+    </div>
+    {{ block.super }}
+{% endblock object-tools %}

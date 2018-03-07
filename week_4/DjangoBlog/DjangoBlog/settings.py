@@ -130,3 +130,13 @@ STATICFILES_DIRS = (
 )
 
 BLOG_NAME = "django blog"
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'test_email@example.com'
+EMAIL_HOST_USER = 'Blog Admin'
+EMAIL_HOST_PASSWORD = 'testpw'
+EMAIL_USE_TLS = False
+EMAIL_PORT = 1025
+
+# https://stackoverflow.com/questions/6367014/how-to-send-email-via-django
+# https://simpleisbetterthancomplex.com/tutorial/2016/06/13/how-to-send-email.html

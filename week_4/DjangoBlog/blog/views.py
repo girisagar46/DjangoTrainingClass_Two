@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import get_template
 from django.views.generic import TemplateView, ListView, DetailView
 from rest_framework import status
 
@@ -11,8 +13,9 @@ from rest_framework.renderers import JSONRenderer
 
 from blog.models import Post, Comment
 from blog.serializers import PostSerializer
+from DjangoBlog.settings import DEFAULT_FROM_EMAIL
 
-from blog.forms import CommentForm, PostForm
+from blog.forms import CommentForm, PostForm, ContactForm
 
 
 # def home(request):
@@ -192,7 +195,33 @@ def post_detail_api(request, pk):
 def api_doc(request):
     return render(request, 'blog/api_doc.html')
 
-
+def contact_us(request):
+    contact_form = ContactForm()
+    if request.method == "POST":
+        if contact_form.is_valid():
+            print("is valis")
+            email_id = request.POST.get('email_id', '')
+            subject = request.POST.get('subject', '')
+            body = request.POST.get('body', '')
+            ctx= {
+                'email_id': email_id,
+                'subject': subject,
+                'body': body
+            }
+            template = get_template('email_template.html')
+            email_content = template.render(context=ctx)
+            email = EmailMessage(
+                "Someone is trying to contact...",
+                email_content,
+                'Django Blog',
+                [DEFAULT_FROM_EMAIL],
+                headers={"Reply-To": email_id}
+            )
+            email.send()
+            return redirect('blog:home')
+        else:
+            return redirect('blog:contact')
+    return render(request, 'contact.html', {"contact_form":contact_form})
 
 
 
